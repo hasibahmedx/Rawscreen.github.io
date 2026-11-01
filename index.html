@@ -222,7 +222,7 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
   <section id="recent">
     <div class="sec-head"><h2>Recent work</h2><span class="mono">Latest 5 projects, live where our clients posted them</span></div>
     <div class="recent" id="recentList"></div>
-    <div class="more"><button class="btn ghost" id="moreBtn" type="button" aria-expanded="false" aria-controls="recentList">See more work</button><span class="mono">Sample entries. Swap in your real video links.</span></div>
+    <div class="more"><button class="btn ghost" id="moreBtn" hidden type="button" aria-expanded="false" aria-controls="recentList">See more work</button><span class="mono" id="workNote">Loading recent work</span></div>
   </section>
 
   <section id="services">
@@ -313,52 +313,70 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
     try { localStorage.setItem("rs-theme", next); } catch (e) {}
   });
 
-  /* RECENT WORK: edit this list. platform is "youtube", "facebook" or "video".
-     url is the link to the video where your client posted it.
-     thumb is optional: a data: URI or a file published with the page. Without it the card shows a colour frame. */
-  var WORK = [
-    { title: "Boita Asole Dey Ke", client: "Eid natok 2024, Maasranga Drama", platform: "youtube", url: "https://www.youtube.com/watch?v=PyYbXNGmVys", dur: "", thumb: "" },
-    { title: "Harbour Coffee", client: "Brand film", platform: "youtube", url: "https://www.youtube.com/", dur: "1:48", thumb: "" },
-    { title: "Night Run", client: "Sportswear launch, 9:16", platform: "facebook", url: "https://www.facebook.com/", dur: "0:15", thumb: "" },
-    { title: "Field Notes", client: "Documentary trailer", platform: "youtube", url: "https://www.youtube.com/", dur: "0:30", thumb: "" },
-    { title: "Orbit Labs", client: "Product explainer", platform: "video", url: "https://vimeo.com/", dur: "3:20", thumb: "" },
-    { title: "Saffron & Co", client: "Restaurant promo", platform: "facebook", url: "https://www.facebook.com/", dur: "0:45", thumb: "" },
-    { title: "Riverside Weddings", client: "Highlight film", platform: "youtube", url: "https://www.youtube.com/", dur: "4:10", thumb: "" },
-    { title: "Urban Fit", client: "Reel for gym launch", platform: "facebook", url: "https://www.facebook.com/", dur: "0:20", thumb: "" },
-    { title: "Tech Review Ep. 12", client: "YouTube series", platform: "youtube", url: "https://www.youtube.com/", dur: "9:30", thumb: "" }
-  ];
+  /* RECENT WORK is loaded from content/work.json. Edit that file (or use admin.html), not this script. */
   var LABEL = { youtube: "YouTube", facebook: "Facebook", video: "Video link" };
   var SHOWN = 5;
   var list = document.getElementById("recentList");
-  var cards = WORK.map(function (w, i) {
-    var a = document.createElement("a");
-    a.className = "card"; a.href = w.url; a.target = "_blank"; a.rel = "noopener noreferrer";
-    a.setAttribute("aria-label", w.title + " on " + LABEL[w.platform]);
-    if (i >= SHOWN) a.hidden = true;
-    var th = document.createElement("div"); th.className = "thumb g" + ((i % 9) + 1);
-    if (w.thumb) th.style.backgroundImage = "url(" + w.thumb + ")";
-    var p = document.createElement("span"); p.className = "plat"; p.textContent = LABEL[w.platform];
-    var pl = document.createElement("div"); pl.className = "play";
-    pl.innerHTML = '<span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 1.5v17l15-8.5z"/></svg></span>';
-    th.appendChild(p); th.appendChild(pl);
-    if (w.dur) { var d = document.createElement("span"); d.className = "dur"; d.textContent = w.dur; th.appendChild(d); }
-    var h = document.createElement("h3"); h.textContent = w.title;
-    var m = document.createElement("div"); m.className = "meta";
-    var c = document.createElement("span"); c.textContent = w.client;
-    var g = document.createElement("span"); g.className = "go"; g.textContent = "Watch on " + LABEL[w.platform] + " →";
-    m.appendChild(c); m.appendChild(g);
-    a.appendChild(th); a.appendChild(h); a.appendChild(m);
-    list.appendChild(a);
-    return a;
-  });
   var btn = document.getElementById("moreBtn");
+  var note = document.getElementById("workNote");
+  var cards = [];
   var open = false;
+
+  function ytId(u) {
+    var m = String(u || "").match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
+    return m ? m[1] : "";
+  }
+  function setThumb(th, w) {
+    if (w.thumb) { th.style.backgroundImage = "url(" + encodeURI(w.thumb) + ")"; return; }
+    var id = ytId(w.url);
+    if (!id) return;
+    var hi = "https://img.youtube.com/vi/" + id + "/maxresdefault.jpg";
+    var mid = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
+    var probe = new Image();
+    probe.onload = function () { th.style.backgroundImage = "url(" + (probe.naturalWidth > 200 ? hi : mid) + ")"; };
+    probe.onerror = function () { th.style.backgroundImage = "url(" + mid + ")"; };
+    probe.src = hi;
+  }
+  function render(work) {
+    list.textContent = "";
+    cards = work.map(function (w, i) {
+      var platform = LABEL[w.platform] ? w.platform : "video";
+      var a = document.createElement("a");
+      a.className = "card"; a.href = w.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.setAttribute("aria-label", w.title + " on " + LABEL[platform]);
+      if (i >= SHOWN) a.hidden = true;
+      var th = document.createElement("div"); th.className = "thumb g" + ((i % 9) + 1);
+      setThumb(th, w);
+      var p = document.createElement("span"); p.className = "plat"; p.textContent = LABEL[platform];
+      var pl = document.createElement("div"); pl.className = "play";
+      pl.innerHTML = '<span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 1.5v17l15-8.5z"/></svg></span>';
+      th.appendChild(p); th.appendChild(pl);
+      if (w.dur) { var d = document.createElement("span"); d.className = "dur"; d.textContent = w.dur; th.appendChild(d); }
+      var h = document.createElement("h3"); h.textContent = w.title;
+      var m = document.createElement("div"); m.className = "meta";
+      var c = document.createElement("span"); c.textContent = w.client || "";
+      var g = document.createElement("span"); g.className = "go"; g.textContent = "Watch on " + LABEL[platform] + " →";
+      m.appendChild(c); m.appendChild(g);
+      a.appendChild(th); a.appendChild(h); a.appendChild(m);
+      list.appendChild(a);
+      return a;
+    });
+    btn.hidden = cards.length <= SHOWN;
+    note.textContent = "";
+  }
   btn.addEventListener("click", function () {
     open = !open;
     cards.forEach(function (c, i) { if (i >= SHOWN) c.hidden = !open; });
     btn.textContent = open ? "Show less" : "See more work";
     btn.setAttribute("aria-expanded", open ? "true" : "false");
   });
+  fetch("content/work.json", { cache: "no-cache" })
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (data) { render(Array.isArray(data) ? data : (data.work || [])); })
+    .catch(function () {
+      btn.hidden = true;
+      note.textContent = "Recent work could not load. Check that content/work.json is uploaded and the site is opened from its web address.";
+    });
 
   var ids = ["type", "len", "raw", "deliver", "due", "notes"];
   var out = document.getElementById("out");

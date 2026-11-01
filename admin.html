@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rawscreen Editor</title>
+<style>
+:root { --bg:#0f1016; --surface:#171925; --ink:#eceef1; --muted:#9aa0ab; --line:#2b2e42; --accent:#ff5a8a; --c2:#22d3ee; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; padding:20px max(16px, env(safe-area-inset-left)) 60px; }
+.wrap { max-width: 980px; margin: 0 auto; }
+h1 { font-size: 28px; margin: 0 0 4px; } h2 { font-size: 18px; margin: 28px 0 10px; border-top: 3px solid var(--accent); padding-top: 12px; }
+p { color: var(--muted); margin: 4px 0 14px; max-width: 70ch; }
+.row { display:grid; grid-template-columns: 56px minmax(0,1.1fr) minmax(0,1fr) 110px minmax(0,1.6fr) 80px; gap:8px; align-items:center; padding:10px; background:var(--surface); border:1px solid var(--line); margin-bottom:8px; }
+.row img, .row .ph { width:56px; height:32px; object-fit:cover; background:linear-gradient(135deg,#ff5a8a,#6d28d9); display:block; }
+input, select, textarea { width:100%; min-width:0; background:var(--bg); color:var(--ink); border:1px solid var(--line); padding:8px 9px; font:inherit; }
+textarea { font-family: ui-monospace,Menlo,Consolas,monospace; font-size:12px; min-height:220px; }
+button, .btn { background:linear-gradient(90deg,var(--accent),#a78bfa); color:#14060c; border:0; padding:9px 14px; font:600 14px system-ui; cursor:pointer; text-decoration:none; display:inline-block; }
+button.ghost { background:none; color:var(--ink); border:1px solid var(--line); padding:6px 9px; }
+.bar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:12px 0; }
+.tools { display:flex; gap:4px; }
+.cols { display:grid; grid-template-columns: 56px minmax(0,1.1fr) minmax(0,1fr) 110px minmax(0,1.6fr) 80px; gap:8px; padding:0 10px; color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.06em; }
+.ok { color:var(--c2); font-size:13px; }
+.steps { counter-reset:s; padding:0; list-style:none; display:grid; gap:8px; }
+.steps li { counter-increment:s; padding-left:34px; position:relative; color:var(--ink); }
+.steps li::before { content:counter(s); position:absolute; left:0; top:0; width:24px; height:24px; background:var(--accent); color:#14060c; font-weight:700; display:grid; place-items:center; }
+@media (max-width: 760px) { .row { grid-template-columns: 56px 1fr; } .cols { display:none; } .row > :nth-child(n+3) { grid-column: 1 / -1; } }
+:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Rawscreen Editor</h1>
+  <p>Add, reorder and remove your recent work here. This page only prepares the list. Nothing is saved until you paste the result into <code>content/work.json</code> on GitHub (step 3).</p>
+
+  <h2>1. Your projects</h2>
+  <p>The first 5 show on the site. The rest appear under "See more work". YouTube thumbnails load by themselves. For Facebook and other links, upload an image and type its path in the Thumbnail column, for example <code>images/work/night-run.jpg</code>.</p>
+  <div class="cols"><span></span><span>Title</span><span>Client / type</span><span>Length</span><span>Video link</span><span>Order</span></div>
+  <div id="rows"></div>
+  <div class="bar"><button id="add" type="button">Add project</button><span class="ok" id="status"></span></div>
+
+  <h2>2. Copy the list</h2>
+  <textarea id="json" spellcheck="false" readonly aria-label="Generated work.json"></textarea>
+  <div class="bar"><button id="copy" type="button">Copy list</button><span class="ok" id="copied"></span></div>
+
+  <h2>3. Save it on GitHub</h2>
+  <div class="bar">
+    <label for="repo">Your repository</label><input id="repo" placeholder="username/repository" style="max-width:280px">
+    <label for="branch">Branch</label><input id="branch" value="main" style="max-width:110px">
+  </div>
+  <ol class="steps">
+    <li>Type your repository above (for example <code>hasib/rawscreen</code>).</li>
+    <li><a class="btn" id="openJson" href="#" target="_blank" rel="noopener">Open work.json on GitHub</a> Select all, paste the copied list, then press Commit changes.</li>
+    <li><a class="btn" id="openUp" href="#" target="_blank" rel="noopener">Upload thumbnail images</a> Drop your images in, then press Commit changes. They go into <code>images/work</code>.</li>
+    <li>Wait one or two minutes, then reload your site.</li>
+  </ol>
+</div>
+<script>
+(function () {
+  var rows = document.getElementById("rows"), out = document.getElementById("json"), status = document.getElementById("status");
+  var data = [];
+  function ytId(u) { var m = String(u||"").match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/); return m ? m[1] : ""; }
+  function platform(u) { if (ytId(u) || /youtube\.com|youtu\.be/.test(u)) return "youtube"; if (/facebook\.com|fb\.watch/.test(u)) return "facebook"; return "video"; }
+  function sync() { out.value = JSON.stringify(data, null, 2); }
+  function el(tag, props) { var e = document.createElement(tag); for (var k in props) e[k] = props[k]; return e; }
+  function field(i, key, placeholder, label) {
+    var inp = el("input", { value: data[i][key] || "", placeholder: placeholder || "" });
+    inp.setAttribute("aria-label", label);
+    inp.addEventListener("input", function () {
+      data[i][key] = inp.value;
+      if (key === "url") { data[i].platform = platform(inp.value); var im = rows.children[i].querySelector(".pv"); if (im) draw(i); }
+      sync();
+    });
+    return inp;
+  }
+  function draw() {
+    rows.textContent = "";
+    data.forEach(function (w, i) {
+      var r = el("div", { className: "row" });
+      var id = ytId(w.url), src = w.thumb || (id ? "https://img.youtube.com/vi/" + id + "/mqdefault.jpg" : "");
+      var pv = src ? el("img", { src: src, alt: "", className: "pv" }) : el("div", { className: "ph pv" });
+      var thumb = field(i, "thumb", "Thumbnail path (optional)", "Thumbnail path");
+      thumb.style.marginTop = "6px";
+      var titleCell = el("div"); titleCell.appendChild(field(i, "title", "Title", "Title")); titleCell.appendChild(thumb);
+      var tools = el("div", { className: "tools" });
+      [["↑", -1, "Move up"], ["↓", 1, "Move down"], ["✕", 0, "Remove"]].forEach(function (t) {
+        var b = el("button", { type: "button", className: "ghost", textContent: t[0] }); b.setAttribute("aria-label", t[2]);
+        b.addEventListener("click", function () {
+          if (t[1] === 0) data.splice(i, 1);
+          else { var j = i + t[1]; if (j < 0 || j >= data.length) return; var x = data[i]; data[i] = data[j]; data[j] = x; }
+          draw(); sync();
+        });
+        tools.appendChild(b);
+      });
+      r.appendChild(pv); r.appendChild(titleCell); r.appendChild(field(i, "client", "Client / type", "Client")); r.appendChild(field(i, "dur", "1:48", "Length")); r.appendChild(field(i, "url", "https://...", "Video link")); r.appendChild(tools);
+      rows.appendChild(r);
+    });
+    status.textContent = data.length + " projects";
+  }
+  document.getElementById("add").addEventListener("click", function () { data.unshift({ title: "", client: "", platform: "youtube", url: "", dur: "", thumb: "" }); draw(); sync(); });
+  document.getElementById("copy").addEventListener("click", function () {
+    var m = document.getElementById("copied");
+    function fb() { out.select(); m.textContent = "Selected. Press Ctrl+C."; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(out.value).then(function () { m.textContent = "Copied"; }, fb); else fb();
+  });
+  var repo = document.getElementById("repo"), branch = document.getElementById("branch"), oj = document.getElementById("openJson"), ou = document.getElementById("openUp");
+  function links() {
+    var r = repo.value.trim().replace(/^https?:\/\/github\.com\//, "").replace(/\/+$/, ""), b = branch.value.trim() || "main";
+    oj.href = r ? "https://github.com/" + r + "/edit/" + b + "/content/work.json" : "#";
+    ou.href = r ? "https://github.com/" + r + "/upload/" + b + "/images/work" : "#";
+    try { localStorage.setItem("rs-repo", r); localStorage.setItem("rs-branch", b); } catch (e) {}
+  }
+  try { repo.value = localStorage.getItem("rs-repo") || ""; branch.value = localStorage.getItem("rs-branch") || "main"; } catch (e) {}
+  repo.addEventListener("input", links); branch.addEventListener("input", links); links();
+  fetch("content/work.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).then(function (d) { data = Array.isArray(d) ? d : []; draw(); sync(); })
+    .catch(function () { status.textContent = "Could not load content/work.json. Open this page from your site address."; });
+})();
+</script>
+</body>
+</html>
