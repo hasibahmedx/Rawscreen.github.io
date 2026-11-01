@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rawscreen</title>
+<meta name="description" content="Rawscreen is a video editing hub. Story edit, colour, sound and delivery.">
+<link rel="icon" href="images/rawscreen-wordmark.jpg">
+<style>
+html { color-scheme: light; }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@75..110,500..900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: brushed-steel cutting room. The logo plate sits beside the headline, recent work follows, then toolkit, services, process, rates, brief. */
+:root {
+  --bg: #0f1016;
+  --surface: #171925;
+  --ink: #eceef1;
+  --muted: #9aa0ab;
+  --line: #2b2e42;
+  --accent: #ff5a8a;
+  --accent-ink: #14060c;
+  --c2: #22d3ee;
+  --c3: #fbbf24;
+  --c4: #a78bfa;
+  --c5: #34d399;
+  --clip-v: #a78bfa;
+  --clip-v2: #22d3ee;
+  --clip-a: #34d399;
+  --clip-t: #fbbf24;
+  --clip-ink: #0f1016;
+  --display: "Anybody", "Arial Narrow", Impact, sans-serif;
+  --body: "Instrument Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f3f0fa; --surface: #ffffff; --ink: #101215; --muted: #5a616c; --line: #d8d2ea;
+    --accent: #d81b60; --accent-ink: #ffffff; --c2: #0e7490; --c3: #b45309; --c4: #6d3fe0; --c5: #047857;
+    --clip-v: #6d3fe0; --clip-v2: #0e7490; --clip-a: #047857; --clip-t: #b45309; --clip-ink: #ffffff;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f3f0fa; --surface: #ffffff; --ink: #101215; --muted: #5a616c; --line: #d8d2ea;
+  --accent: #d81b60; --accent-ink: #ffffff; --c2: #0e7490; --c3: #b45309; --c4: #6d3fe0; --c5: #047857;
+  --clip-v: #6d3fe0; --clip-v2: #0e7490; --clip-a: #047857; --clip-t: #b45309; --clip-ink: #ffffff;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+a { color: inherit; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 20px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mono { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--display); font-stretch: 80%; text-wrap: balance; margin: 0; line-height: .95; letter-spacing: -.01em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* nav */
+nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.logo-link { display: block; line-height: 0; }
+.logo-word { height: 32px; width: auto; max-width: 100%; display: block; }
+.links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-size: 14px; }
+.links a { text-decoration: none; color: var(--muted); }
+.links a:hover { color: var(--ink); }
+.toggle { font: inherit; font-family: var(--mono); font-size: 12px; background: none; color: var(--ink); border: 1px solid var(--line); padding: 6px 10px; cursor: pointer; }
+.btn { display: inline-block; background: linear-gradient(90deg, var(--accent), var(--c4)); color: var(--accent-ink); font-weight: 600; text-decoration: none; padding: 13px 22px; border: 0; font-size: 15px; cursor: pointer; font-family: var(--body); }
+.btn.ghost { background: none; color: var(--ink); border: 1px solid var(--accent); }
+
+/* hero */
+.hero { padding-block: 48px 8px; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 36px; align-items: center; }
+.hero h1 { font-size: clamp(42px, 7.4vw, 100px); font-weight: 900; text-transform: uppercase; margin: 14px 0 22px; }
+.hero h1 em { font-style: normal; color: var(--accent); background: linear-gradient(90deg, var(--accent), var(--c3) 55%, var(--c2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { max-width: 46ch; margin: 0 0 24px; font-size: 18px; color: var(--muted); }
+.cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.plate { border: 1px solid var(--line); line-height: 0; max-width: 100%; }
+.plate img { width: 100%; height: auto; display: block; }
+@media (max-width: 820px) { .hero { grid-template-columns: minmax(0, 1fr); } .plate { max-width: 420px; } }
+
+/* sections */
+section { padding-top: 72px; }
+.sec-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; border-top: 2px solid var(--ink); padding-top: 14px; margin-bottom: 28px; }
+.sec-head h2 { font-size: clamp(36px, 6vw, 68px); font-weight: 800; text-transform: uppercase; }
+.grid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.cell { background: var(--bg); padding: 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.cell h3 { font-size: 28px; font-weight: 800; text-transform: uppercase; }
+.cell p { margin: 0; color: var(--muted); font-size: 15px; }
+.specs { margin-top: auto; padding-top: 10px; }
+
+/* recent work */
+.recent { display: grid; gap: 20px 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.recent .card:nth-child(1) { grid-column: 1 / -1; }
+@media (min-width: 900px) {
+  .recent { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .recent .card:nth-child(1) { grid-column: 1 / span 2; grid-row: 1 / span 2; }
+}
+.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; text-decoration: none; }
+.card[hidden] { display: none; }
+.thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background-size: cover; background-position: center; border: 1px solid var(--line); overflow: hidden; }
+.card:nth-child(1) .thumb { flex: 1; min-height: 0; aspect-ratio: auto; min-height: 240px; }
+.g1 { background-image: linear-gradient(132deg, #ff5a8a, #6d28d9); } .g2 { background-image: linear-gradient(144deg, #22d3ee, #1e3a8a); }
+.g3 { background-image: linear-gradient(156deg, #fbbf24, #be185d); } .g4 { background-image: linear-gradient(168deg, #34d399, #0f3d5e); }
+.g5 { background-image: linear-gradient(180deg, #a78bfa, #f97316); } .g6 { background-image: linear-gradient(192deg, #f97316, #7c1d6f); }
+.g7 { background-image: linear-gradient(204deg, #2dd4bf, #4338ca); } .g8 { background-image: linear-gradient(216deg, #facc15, #dc2626); }
+.g9 { background-image: linear-gradient(228deg, #60a5fa, #9333ea); }
+.play { position: absolute; inset: 0; display: grid; place-items: center; }
+.play span { width: 54px; height: 54px; border-radius: 50%; background: rgba(12,14,18,.62); display: grid; place-items: center; border: 1px solid rgba(255,255,255,.55); transition: transform .2s; }
+.play svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; }
+.card:hover .play span, .card:focus-visible .play span { transform: scale(1.12); }
+.dur { position: absolute; right: 8px; bottom: 8px; background: rgba(12,14,18,.78); color: #fff; font: 500 11px var(--mono); padding: 2px 6px; }
+.plat { position: absolute; left: 8px; top: 8px; background: rgba(12,14,18,.78); color: #fff; font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; }
+.card h3 { font-size: 24px; font-weight: 800; text-transform: uppercase; }
+.card .meta { color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.card .go { color: var(--accent); }
+.more { margin-top: 28px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+/* toolkit */
+.tool-name { font-size: 30px; }
+.tool-tag { align-self: flex-start; border: 1px solid var(--line); padding: 2px 8px; }
+
+/* timeline */
+.nle { border: 1px solid var(--line); background: var(--surface); margin-top: 24px; position: relative; }
+.nle-head { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.nle-scroll { overflow-x: auto; position: relative; }
+.nle-body { min-width: 640px; position: relative; padding: 0 14px 14px 56px; }
+.ruler { height: 28px; position: relative; border-bottom: 1px solid var(--line); }
+.ruler span { position: absolute; top: 8px; font-family: var(--mono); font-size: 10px; color: var(--muted); transform: translateX(-2px); }
+.ruler span::before { content: ""; position: absolute; left: 2px; top: -8px; height: 6px; border-left: 1px solid var(--line); }
+.track { position: relative; height: 40px; margin-top: 8px; background: repeating-linear-gradient(90deg, transparent 0 calc(12.5% - 1px), var(--line) calc(12.5% - 1px) 12.5%); }
+.track b { position: absolute; left: -48px; top: 12px; font: 500 11px var(--mono); color: var(--muted); }
+.clip { position: absolute; top: 3px; bottom: 3px; padding: 4px 8px; font: 500 11px var(--mono); color: var(--clip-ink); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.clip.v { background: var(--clip-v); } .clip.v2 { background: var(--clip-v2); } .clip.a { background: var(--clip-a); } .clip.t { background: var(--clip-t); }
+.playhead { position: absolute; top: 0; bottom: 0; left: calc(56px + (100% - 70px) * .38); width: 0; border-left: 2px solid var(--accent); animation: scrub 14s linear infinite alternate; }
+.playhead::before { content: ""; position: absolute; top: 0; left: -7px; border: 6px solid transparent; border-top: 9px solid var(--accent); }
+@keyframes scrub { from { left: calc(56px + (100% - 70px) * .12); } to { left: calc(56px + (100% - 70px) * .74); } }
+@media (prefers-reduced-motion: reduce) { .playhead { animation: none; } .play span { transition: none; } }
+
+/* process */
+.steps { display: grid; gap: 0; }
+.step { display: grid; grid-template-columns: 140px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.step h3 { font-size: 30px; font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+.step p { margin: 0; color: var(--muted); max-width: 60ch; }
+@media (max-width: 560px) { .step { grid-template-columns: 1fr; gap: 6px; } }
+
+/* pricing */
+.price { font-family: var(--display); font-stretch: 80%; font-weight: 900; font-size: 54px; line-height: 1; }
+.price small { font: 400 13px var(--mono); color: var(--muted); }
+.cell ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; display: grid; gap: 4px; }
+.tag { align-self: flex-start; border: 1px solid var(--accent); color: var(--accent); padding: 2px 8px; }
+
+/* brief */
+.brief { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.field { display: grid; gap: 6px; margin-bottom: 14px; }
+.field label { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.field select, .field input, .field textarea { font: inherit; background: var(--surface); color: var(--ink); border: 1px solid var(--line); padding: 11px 12px; width: 100%; min-width: 0; }
+.out { background: var(--surface); border: 1px solid var(--line); padding: 16px; font: 400 13px/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; min-height: 200px; }
+footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.tool-ico { width: 44px; height: 44px; color: var(--ink); display: block; }
+.tool-ico svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 2.5; fill: currentColor; }
+.tool-ico path { fill: none; }
+/* colour system: five hues rotate through sections and cards */
+#recent .sec-head, #brief .sec-head { border-top-color: var(--accent); }
+#services .sec-head { border-top-color: var(--c2); }
+#process .sec-head { border-top-color: var(--c3); }
+#toolkit .sec-head { border-top-color: var(--c4); }
+#rates .sec-head { border-top-color: var(--c5); }
+.sec-head { border-top-width: 4px; }
+.cell { border-top: 3px solid var(--accent); }
+.cell:nth-child(5n+2) { border-top-color: var(--c2); } .cell:nth-child(5n+3) { border-top-color: var(--c3); }
+.cell:nth-child(5n+4) { border-top-color: var(--c4); } .cell:nth-child(5n+5) { border-top-color: var(--c5); }
+#toolkit .cell:nth-child(1) .tool-ico { color: var(--accent); } #toolkit .cell:nth-child(2) .tool-ico { color: var(--c2); } #toolkit .cell:nth-child(3) .tool-ico { color: var(--c3); }
+#rates .cell:nth-child(1) .tag { color: var(--accent); border-color: var(--accent); }
+#rates .cell:nth-child(2) .tag { color: var(--c2); border-color: var(--c2); }
+#rates .cell:nth-child(3) .tag { color: var(--c5); border-color: var(--c5); }
+.step:nth-child(5n+1) .mono { color: var(--accent); } .step:nth-child(5n+2) .mono { color: var(--c2); } .step:nth-child(5n+3) .mono { color: var(--c3); }
+.step:nth-child(5n+4) .mono { color: var(--c4); } .step:nth-child(5n+5) .mono { color: var(--c5); }
+.price { color: var(--ink); }
+.specs { color: var(--c2); }
+/* hover pop: text lifts and grows slightly under the cursor */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .hero h1, .hero p, .sec-head h2, .cell h3, .cell p, .cell ul li, .step h3, .step p, .card h3, .card .meta, .price, .links a, .mono, .field label {
+    transition: transform .18s ease, color .18s ease, text-shadow .18s ease;
+    transform-origin: left center;
+  }
+  .links a, .mono { display: inline-block; }
+  .hero h1:hover { transform: translateY(-4px) scale(1.02); }
+  .hero p:hover, .cell p:hover, .step p:hover, .cell ul li:hover { transform: translateY(-2px) scale(1.03); color: var(--ink); }
+  .sec-head h2:hover, .cell h3:hover, .step h3:hover, .card h3:hover, .price:hover { transform: translateY(-3px) scale(1.05); text-shadow: 0 6px 18px rgba(0,0,0,.28); }
+  .card h3:hover, .cell h3:hover, .step h3:hover { color: var(--accent); }
+  .card .meta:hover { transform: translateY(-2px) scale(1.03); color: var(--ink); }
+  .links a:hover, .mono:hover, .field label:hover { transform: translateY(-2px) scale(1.08); }
+  .cell, .card .thumb { transition: transform .2s ease, box-shadow .2s ease; }
+  .cell:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.25); position: relative; z-index: 1; }
+  .card:hover .thumb { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(0,0,0,.35); }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <a class="logo-link" href="#top" aria-label="Rawscreen home"><img class="logo-word" src="images/rawscreen-wordmark.jpg" alt="Rawscreen"></a>
+    <div class="links">
+      <a href="#recent">Recent work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#toolkit">Software</a><a href="#rates">Rates</a><a href="#brief">Start a project</a>
+      <button class="toggle" id="theme" type="button" aria-label="Switch light or dark theme">THEME</button>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <span class="mono">Video editing hub / Reel 01 / 23.976 fps</span>
+      <h1>Cut it raw.<br><em>Ship it clean.</em></h1>
+      <p>Rawscreen takes your unsorted footage and returns a finished film. Story edit, colour, sound and delivery, handled by editors who live in the timeline.</p>
+      <div class="cta"><a class="btn" href="#brief">Start a project</a><a class="btn ghost" href="#recent">See recent work</a></div>
+    </div>
+    <div class="plate"><img src="images/rawscreen-logo.jpg" alt="Rawscreen logo: the wordmark inside a curved screen frame"></div>
+  </header>
+
+  <section id="recent">
+    <div class="sec-head"><h2>Recent work</h2><span class="mono">Latest 5 projects, live where our clients posted them</span></div>
+    <div class="recent" id="recentList"></div>
+    <div class="more"><button class="btn ghost" id="moreBtn" type="button" aria-expanded="false" aria-controls="recentList">See more work</button><span class="mono">Sample entries. Swap in your real video links.</span></div>
+  </section>
+
+  <section id="services">
+    <div class="sec-head"><h2>What we cut</h2><span class="mono">Five disciplines, one hub</span></div>
+    <div class="grid">
+      <div class="cell"><h3>Story edit</h3><p>Interviews, documentaries, ads and brand films shaped from hours of rushes into a clear arc.</p><span class="mono specs">Premiere Pro</span></div>
+      <div class="cell"><h3>Short-form</h3><p>Reels, Shorts and TikToks with captions, punch-ins and pacing built for the first two seconds.</p><span class="mono specs">9:16 / 1:1 / 16:9</span></div>
+      <div class="cell"><h3>Colour</h3><p>Matching cameras, fixing skin tones and building a look that holds from phone to cinema.</p><span class="mono specs">DaVinci Resolve / Rec.709</span></div>
+      <div class="cell"><h3>Motion &amp; titles</h3><p>Lower thirds, kinetic type, logo stings and simple graphics that match your brand.</p><span class="mono specs">After Effects</span></div>
+      <div class="cell"><h3>Sound</h3><p>Dialogue clean-up, music edit and a balanced mix that meets platform loudness targets.</p><span class="mono specs">-14 LUFS web / -23 LUFS broadcast</span></div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="sec-head"><h2>From rushes to render</h2><span class="mono">Every project runs in this order</span></div>
+    <div class="steps">
+      <div class="step"><span class="mono">Stage 1 / Ingest</span><div><h3>Sync and sort</h3><p>You send footage. We make proxies, sync audio, log selects and agree the brief before the first cut.</p></div></div>
+      <div class="step"><span class="mono">Stage 2 / Assembly</span><div><h3>Rough cut</h3><p>The full story in order, with placeholder music and no polish. You review structure, not details.</p></div></div>
+      <div class="step"><span class="mono">Stage 3 / Fine cut</span><div><h3>Pace and picture lock</h3><p>Trims, transitions, graphics and cutaways. Two feedback rounds are included, then the picture locks.</p></div></div>
+      <div class="step"><span class="mono">Stage 4 / Finish</span><div><h3>Grade and mix</h3><p>Colour, sound and final graphics are applied to the locked picture so nothing shifts afterwards.</p></div></div>
+      <div class="step"><span class="mono">Stage 5 / Deliver</span><div><h3>Export for every screen</h3><p>Master file plus platform versions, subtitles and thumbnails, delivered by link.</p></div></div>
+    </div>
+  </section>
+
+  <section id="toolkit">
+    <div class="sec-head"><h2>The software we use</h2><span class="mono">Three suites, one pipeline</span></div>
+    <div class="grid">
+      <div class="cell"><span class="mono tool-tag">Adobe</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="10" width="26" height="8"/><rect x="13" y="22" width="30" height="8"/><rect x="5" y="34" width="20" height="6"/></svg></span><h3 class="tool-name">Premiere Pro</h3><p>Where the story is built. Assembly, rough cut, fine cut and multi-camera sync all happen here.</p><span class="mono specs">Edit / Captions / Export</span></div>
+      <div class="cell"><span class="mono tool-tag">Adobe</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 C16 6 30 42 42 12" fill="none"/><rect x="3" y="33" width="6" height="6" transform="rotate(45 6 36)"/><rect x="39" y="9" width="6" height="6" transform="rotate(45 42 12)"/></svg></span><h3 class="tool-name">After Effects</h3><p>Motion graphics, animated titles, logo stings and visual effects that drop straight into the edit.</p><span class="mono specs">Titles / Motion / VFX</span></div>
+      <div class="cell"><span class="mono tool-tag">Blackmagic Design</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 8v32M24 8v32M38 8v32" fill="none"/><rect x="5" y="14" width="10" height="6"/><rect x="19" y="28" width="10" height="6"/><rect x="33" y="18" width="10" height="6"/></svg></span><h3 class="tool-name">DaVinci Resolve</h3><p>Colour grading and finishing. Cameras are matched, looks are built and the master is graded here.</p><span class="mono specs">Grade / LUTs / Finish</span></div>
+    </div>
+    <div class="nle" role="img" aria-label="Sample edit timeline with video, title and audio tracks">
+      <div class="nle-head"><span class="mono">Sequence: Brand_Film_v3</span><span class="mono">TC 00:00:42:11 &nbsp;|&nbsp; 3840x2160 &nbsp;|&nbsp; ProRes 422 HQ</span></div>
+      <div class="nle-scroll">
+        <div class="nle-body">
+          <div class="ruler">
+            <span style="left:0%">00:00</span><span style="left:12.5%">00:10</span><span style="left:25%">00:20</span><span style="left:37.5%">00:30</span><span style="left:50%">00:40</span><span style="left:62.5%">00:50</span><span style="left:75%">01:00</span><span style="left:87.5%">01:10</span>
+          </div>
+          <div class="track"><b>V2</b><div class="clip t" style="left:6%;width:14%">Lower third</div><div class="clip t" style="left:52%;width:18%">Title card</div></div>
+          <div class="track"><b>V1</b><div class="clip v" style="left:0;width:22%">A001_C004 interview</div><div class="clip v2" style="left:22.5%;width:16%">B-roll harbour</div><div class="clip v" style="left:39%;width:27%">A002_C011 product</div><div class="clip v2" style="left:66.5%;width:33.5%">B-roll finale</div></div>
+          <div class="track"><b>A1</b><div class="clip a" style="left:0;width:66%">Dialogue, noise reduced</div><div class="clip a" style="left:66.5%;width:33.5%">VO tail</div></div>
+          <div class="track"><b>A2</b><div class="clip a" style="left:4%;width:92%">Score, ducked -14 dB under dialogue</div></div>
+        </div>
+        <div class="playhead" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rates">
+    <div class="sec-head"><h2>Rates</h2><span class="mono">Example pricing, edit before launch</span></div>
+    <div class="grid">
+      <div class="cell"><span class="mono tag">Short-form</span><div class="price">$40 <small>/ video</small></div><ul><li>Up to 60 seconds</li><li>Captions and music</li><li>1 revision round</li></ul></div>
+      <div class="cell"><span class="mono tag">Story edit</span><div class="price">$300 <small>/ finished min</small></div><ul><li>Full edit, colour and mix</li><li>2 revision rounds</li><li>Master plus web export</li></ul></div>
+      <div class="cell"><span class="mono tag">Monthly hub</span><div class="price">$900 <small>/ month</small></div><ul><li>Up to 12 short-form videos</li><li>One long-form edit</li><li>48-hour turnaround</li></ul></div>
+    </div>
+  </section>
+
+  <section id="brief">
+    <div class="sec-head"><h2>Start a project</h2><span class="mono">Build your brief, copy it, send it</span></div>
+    <div class="brief">
+      <form id="form" autocomplete="off">
+        <div class="field"><label for="type">Project type</label><select id="type"><option>Brand film</option><option>Short-form social</option><option>Documentary</option><option>YouTube video</option><option>Event recap</option></select></div>
+        <div class="field"><label for="len">Finished length</label><input id="len" value="2 minutes"></div>
+        <div class="field"><label for="raw">Raw footage</label><input id="raw" value="3 hours, 4K, Log"></div>
+        <div class="field"><label for="deliver">Deliver as</label><select id="deliver"><option>16:9 master + 9:16 cutdown</option><option>16:9 only</option><option>9:16 only</option><option>All aspect ratios + subtitles</option></select></div>
+        <div class="field"><label for="due">Deadline</label><input id="due" type="date"></div>
+        <div class="field"><label for="notes">Notes</label><textarea id="notes" rows="3">Reference: clean, warm grade, upbeat music.</textarea></div>
+      </form>
+      <div>
+        <div class="out" id="out" aria-live="polite"></div>
+        <div class="cta" style="margin-top:14px"><button class="btn" id="copy" type="button">Copy brief</button><span class="mono" id="msg" style="align-self:center"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><img class="logo-word" src="images/rawscreen-wordmark.jpg" alt="Rawscreen" style="height:26px"><span class="mono">Video editing hub / End of reel</span></footer>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  try { var t = localStorage.getItem("rs-theme"); if (t) root.setAttribute("data-theme", t); } catch (e) {}
+  document.getElementById("theme").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme");
+    var light = cur ? cur === "light" : window.matchMedia("(prefers-color-scheme: light)").matches;
+    var next = light ? "dark" : "light";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("rs-theme", next); } catch (e) {}
+  });
+
+  /* RECENT WORK: edit this list. platform is "youtube", "facebook" or "video".
+     url is the link to the video where your client posted it.
+     thumb is optional: a data: URI or a file published with the page. Without it the card shows a colour frame. */
+  var WORK = [
+    { title: "Boita Asole Dey Ke", client: "Eid natok 2024, Maasranga Drama", platform: "youtube", url: "https://www.youtube.com/watch?v=PyYbXNGmVys", dur: "", thumb: "" },
+    { title: "Harbour Coffee", client: "Brand film", platform: "youtube", url: "https://www.youtube.com/", dur: "1:48", thumb: "" },
+    { title: "Night Run", client: "Sportswear launch, 9:16", platform: "facebook", url: "https://www.facebook.com/", dur: "0:15", thumb: "" },
+    { title: "Field Notes", client: "Documentary trailer", platform: "youtube", url: "https://www.youtube.com/", dur: "0:30", thumb: "" },
+    { title: "Orbit Labs", client: "Product explainer", platform: "video", url: "https://vimeo.com/", dur: "3:20", thumb: "" },
+    { title: "Saffron & Co", client: "Restaurant promo", platform: "facebook", url: "https://www.facebook.com/", dur: "0:45", thumb: "" },
+    { title: "Riverside Weddings", client: "Highlight film", platform: "youtube", url: "https://www.youtube.com/", dur: "4:10", thumb: "" },
+    { title: "Urban Fit", client: "Reel for gym launch", platform: "facebook", url: "https://www.facebook.com/", dur: "0:20", thumb: "" },
+    { title: "Tech Review Ep. 12", client: "YouTube series", platform: "youtube", url: "https://www.youtube.com/", dur: "9:30", thumb: "" }
+  ];
+  var LABEL = { youtube: "YouTube", facebook: "Facebook", video: "Video link" };
+  var SHOWN = 5;
+  var list = document.getElementById("recentList");
+  var cards = WORK.map(function (w, i) {
+    var a = document.createElement("a");
+    a.className = "card"; a.href = w.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+    a.setAttribute("aria-label", w.title + " on " + LABEL[w.platform]);
+    if (i >= SHOWN) a.hidden = true;
+    var th = document.createElement("div"); th.className = "thumb g" + ((i % 9) + 1);
+    if (w.thumb) th.style.backgroundImage = "url(" + w.thumb + ")";
+    var p = document.createElement("span"); p.className = "plat"; p.textContent = LABEL[w.platform];
+    var pl = document.createElement("div"); pl.className = "play";
+    pl.innerHTML = '<span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 1.5v17l15-8.5z"/></svg></span>';
+    th.appendChild(p); th.appendChild(pl);
+    if (w.dur) { var d = document.createElement("span"); d.className = "dur"; d.textContent = w.dur; th.appendChild(d); }
+    var h = document.createElement("h3"); h.textContent = w.title;
+    var m = document.createElement("div"); m.className = "meta";
+    var c = document.createElement("span"); c.textContent = w.client;
+    var g = document.createElement("span"); g.className = "go"; g.textContent = "Watch on " + LABEL[w.platform] + " →";
+    m.appendChild(c); m.appendChild(g);
+    a.appendChild(th); a.appendChild(h); a.appendChild(m);
+    list.appendChild(a);
+    return a;
+  });
+  var btn = document.getElementById("moreBtn");
+  var open = false;
+  btn.addEventListener("click", function () {
+    open = !open;
+    cards.forEach(function (c, i) { if (i >= SHOWN) c.hidden = !open; });
+    btn.textContent = open ? "Show less" : "See more work";
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  var ids = ["type", "len", "raw", "deliver", "due", "notes"];
+  var out = document.getElementById("out");
+  function build() {
+    var v = {}; ids.forEach(function (i) { v[i] = document.getElementById(i).value || "not set"; });
+    var text = "RAWSCREEN PROJECT BRIEF\n-----------------------\n" +
+      "Type:        " + v.type + "\nLength:      " + v.len + "\nRaw footage: " + v.raw +
+      "\nDeliver as:  " + v.deliver + "\nDeadline:    " + v.due + "\nNotes:       " + v.notes;
+    out.textContent = text;
+    return text;
+  }
+  document.getElementById("form").addEventListener("input", build);
+  document.getElementById("form").addEventListener("submit", function (e) { e.preventDefault(); });
+  build();
+
+  var msg = document.getElementById("msg");
+  document.getElementById("copy").addEventListener("click", function () {
+    var text = build();
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(out);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      msg.textContent = "Selected. Press copy.";
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { msg.textContent = "Copied"; }, fallback);
+    } else { fallback(); }
+  });
+})();
+</script>
+</body>
+</html>
