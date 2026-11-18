@@ -35,7 +35,7 @@ button.ghost { background:none; color:var(--ink); border:1px solid var(--line); 
   <p>Add, reorder and remove your recent work here. This page only prepares the list. Nothing is saved until you paste the result into <code>content/work.json</code> on GitHub (step 3).</p>
 
   <h2>1. Your projects</h2>
-  <p>The first 5 show on the site. The rest appear under "See more work". YouTube thumbnails load by themselves. For Facebook and other links, upload an image and type its path in the Thumbnail column, for example <code>images/work/night-run.jpg</code>.</p>
+  <p>All projects show on the site in this order. YouTube thumbnails load by themselves. For Facebook and other links, upload an image and type its path in the Thumbnail column, for example <code>images/work/night-run.jpg</code>.</p>
   <div class="cols"><span></span><span>Title</span><span>Client / type</span><span>Length</span><span>Video link</span><span>Order</span></div>
   <div id="rows"></div>
   <div class="bar"><button id="add" type="button">Add project</button><span class="ok" id="status"></span></div>
@@ -61,7 +61,7 @@ button.ghost { background:none; color:var(--ink); border:1px solid var(--line); 
   var rows = document.getElementById("rows"), out = document.getElementById("json"), status = document.getElementById("status");
   var data = [];
   function ytId(u) { var m = String(u||"").match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/); return m ? m[1] : ""; }
-  function platform(u) { if (ytId(u) || /youtube\.com|youtu\.be/.test(u)) return "youtube"; if (/facebook\.com|fb\.watch/.test(u)) return "facebook"; return "video"; }
+  function platform(u) { if (ytId(u) || /youtube\.com|youtu\.be/.test(u)) return "youtube"; if (/facebook\.com|fb\.watch/.test(u)) return "facebook"; if (/chorki\./.test(u)) return "chorki"; return "video"; }
   function sync() { out.value = JSON.stringify(data, null, 2); }
   function el(tag, props) { var e = document.createElement(tag); for (var k in props) e[k] = props[k]; return e; }
   function field(i, key, placeholder, label) {
@@ -93,12 +93,12 @@ button.ghost { background:none; color:var(--ink); border:1px solid var(--line); 
         });
         tools.appendChild(b);
       });
-      r.appendChild(pv); r.appendChild(titleCell); r.appendChild(field(i, "client", "Client / type", "Client")); r.appendChild(field(i, "dur", "1:48", "Length")); r.appendChild(field(i, "url", "https://...", "Video link")); r.appendChild(tools);
+      r.appendChild(pv); r.appendChild(titleCell); var cc = el("div"); cc.appendChild(field(i, "client", "Channel / client", "Channel or client")); var cap = field(i, "caption", "Short caption", "Short caption"); cap.style.marginTop = "6px"; cc.appendChild(cap); r.appendChild(cc); r.appendChild(field(i, "dur", "1:48", "Length")); r.appendChild(field(i, "url", "https://...", "Video link")); r.appendChild(tools);
       rows.appendChild(r);
     });
     status.textContent = data.length + " projects";
   }
-  document.getElementById("add").addEventListener("click", function () { data.unshift({ title: "", client: "", platform: "youtube", url: "", dur: "", thumb: "" }); draw(); sync(); });
+  document.getElementById("add").addEventListener("click", function () { data.unshift({ title: "", client: "", caption: "", platform: "youtube", url: "", dur: "", thumb: "" }); draw(); sync(); });
   document.getElementById("copy").addEventListener("click", function () {
     var m = document.getElementById("copied");
     function fb() { out.select(); m.textContent = "Selected. Press Ctrl+C."; }

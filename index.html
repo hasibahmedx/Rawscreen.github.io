@@ -59,63 +59,94 @@ a { color: inherit; }
 h1, h2, h3 { font-family: var(--display); font-stretch: 80%; text-wrap: balance; margin: 0; line-height: .95; letter-spacing: -.01em; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-/* nav */
-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-.logo-link { display: block; line-height: 0; }
-.logo-word { height: 32px; width: auto; max-width: 100%; display: block; }
-.links { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; font-size: 14px; }
-.links a { text-decoration: none; color: var(--muted); }
-.links a:hover { color: var(--ink); }
-.toggle { font: inherit; font-family: var(--mono); font-size: 12px; background: none; color: var(--ink); border: 1px solid var(--line); padding: 6px 10px; cursor: pointer; }
+/* header: locked to the top, steel from the logo, plain text links */
+html { scroll-padding-top: 90px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.topbar { position: sticky; top: 0; z-index: 50; background: linear-gradient(180deg, #34383c 0%, #25282b 100%); border-bottom: 1px solid #4b5056; box-shadow: 0 6px 18px rgba(0,0,0,.35); padding-top: env(safe-area-inset-top, 0px); }
+.bar-in { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 12px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); }
+.logo-link { display: block; line-height: 0; flex: none; }
+.logo-word { height: 30px; width: auto; max-width: 100%; display: block; }
+.strip { display: flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 6px 26px; min-width: 0; }
+.strip a, .strip .nav-btn { font: 500 14px var(--body); color: #d6d9dd; background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 0; text-decoration: none; cursor: pointer; white-space: nowrap; transition: color .15s ease, border-color .15s ease; }
+.strip a:hover, .strip .nav-btn:hover, .strip .nav-btn[aria-expanded="true"] { color: #ffffff; border-bottom-color: #aab0b7; }
+.strip a[aria-current="true"] { color: #ffffff; border-bottom-color: #ffffff; }
+.strip .nav-btn span { font-size: 10px; color: #aab0b7; }
+.strip .nav-btn.theme { border: 1px solid #5a6068; padding: 5px 12px; }
+.strip .nav-btn.theme:hover { border-color: #aab0b7; }
+.contact-menu { position: fixed; z-index: 60; min-width: 210px; background: #25282b; border: 1px solid #50555b; box-shadow: 0 14px 30px rgba(0,0,0,.45); padding: 6px; display: grid; gap: 2px; }
+.contact-menu[hidden] { display: none; }
+.contact-menu a { display: flex; align-items: center; gap: 12px; padding: 11px 14px; color: #d6d9dd; text-decoration: none; font: 500 14px var(--body); }
+.contact-menu a:hover, .contact-menu a:focus-visible { background: #3a3f45; color: #ffffff; }
+.contact-menu svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 760px) { .bar-in { flex-direction: column; align-items: stretch; gap: 6px; } .strip { justify-content: flex-start; gap: 4px 20px; } .logo-word { height: 26px; } }
 .btn { display: inline-block; background: linear-gradient(90deg, var(--accent), var(--c4)); color: var(--accent-ink); font-weight: 600; text-decoration: none; padding: 13px 22px; border: 0; font-size: 15px; cursor: pointer; font-family: var(--body); }
 .btn.ghost { background: none; color: var(--ink); border: 1px solid var(--accent); }
 
 /* hero */
-.hero { padding-block: 48px 8px; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 36px; align-items: center; }
-.hero h1 { font-size: clamp(42px, 7.4vw, 100px); font-weight: 900; text-transform: uppercase; margin: 14px 0 22px; }
+.hero { padding-block: 56px 8px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.hero h1 { font-size: clamp(32px, 5.2vw, 70px); white-space: nowrap; font-weight: 900; text-transform: uppercase; margin: 0 0 20px; line-height: .98; }
 .hero h1 em { font-style: normal; color: var(--accent); background: linear-gradient(90deg, var(--accent), var(--c3) 55%, var(--c2)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-.hero p { max-width: 46ch; margin: 0 0 24px; font-size: 18px; color: var(--muted); }
+.hero p { max-width: 46ch; margin: 0; font-size: 18px; color: var(--muted); }
 .cta { display: flex; gap: 12px; flex-wrap: wrap; }
-.plate { border: 1px solid var(--line); line-height: 0; max-width: 100%; }
-.plate img { width: 100%; height: auto; display: block; }
-@media (max-width: 820px) { .hero { grid-template-columns: minmax(0, 1fr); } .plate { max-width: 420px; } }
+.hero .nle { margin-top: 36px; }
+@media (max-width: 820px) { .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+/* program monitor: follows the timeline playhead */
+.monitor { background: #0b0c0e; border: 1px solid #3a3e43; box-shadow: 0 18px 40px rgba(0,0,0,.35); display: flex; flex-direction: column; min-width: 0; }
+.mon-bar { display: flex; justify-content: space-between; gap: 12px; padding: 8px 12px; font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #aab0b7; background: #17191b; }
+.mon-bar b { font-weight: 500; color: #ffffff; }
+.screen { position: relative; aspect-ratio: 16 / 9; max-width: 100%; overflow: hidden; background: #000; }
+.layer { position: absolute; inset: 0; opacity: 0; transition: opacity .3s ease; }
+.layer.on { opacity: 1; }
+.layer svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.lt { position: absolute; left: 6%; bottom: 12%; background: rgba(11,12,14,.8); color: #fff; padding: 6px 14px 6px 12px; font: 600 14px var(--body); border-left: 4px solid var(--accent); opacity: 0; transform: translateX(-14px); transition: opacity .3s ease, transform .3s ease; }
+.lt small { display: block; font: 400 10px var(--mono); color: #c3c8ce; letter-spacing: .06em; text-transform: uppercase; }
+.ttl { position: absolute; inset: 0; display: grid; place-items: center; font-family: var(--display); font-stretch: 80%; font-weight: 900; font-size: clamp(22px, 4.4vw, 48px); line-height: 1; color: #fff; text-transform: uppercase; letter-spacing: .02em; text-shadow: 0 4px 24px rgba(0,0,0,.55); opacity: 0; transition: opacity .3s ease; }
+.lt.on, .ttl.on { opacity: 1; transform: none; }
+.vu { position: absolute; right: 3%; top: 10%; bottom: 10%; display: flex; gap: 3px; align-items: flex-end; background: rgba(0,0,0,.35); padding: 3px; }
+.vu i { display: block; width: 5px; height: 30%; background: linear-gradient(0deg, #34d399 0 60%, #fbbf24 60% 85%, #ff5a8a 85%); }
+.prog { height: 3px; background: #2b2e33; }
+.prog i { display: block; height: 100%; width: 0; background: var(--accent); }
+.playhead { position: absolute; top: 0; bottom: 0; left: calc(56px + (100% - 70px) * .38); width: 0; border-left: 2px solid var(--accent); }
+.playhead::before { content: ""; position: absolute; top: 0; left: -7px; border: 6px solid transparent; border-top: 9px solid var(--accent); }
+/* footer band, blended with the header */
+.foot { background: linear-gradient(180deg, #25282b 0%, #34383c 100%); border-top: 1px solid #4b5056; padding-bottom: env(safe-area-inset-bottom, 0px); }
+.foot .bar-in { padding-block: 24px; }
+.foot-logo { height: 46px; width: auto; max-width: 100%; display: block; }
+.foot-txt { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: #aab0b7; }
 
 /* sections */
 section { padding-top: 72px; }
 .sec-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; border-top: 2px solid var(--ink); padding-top: 14px; margin-bottom: 28px; }
 .sec-head h2 { font-size: clamp(36px, 6vw, 68px); font-weight: 800; text-transform: uppercase; }
-.grid { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.cell { background: var(--bg); padding: 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.cell { background: var(--bg); border: 1px solid var(--line); padding: 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .cell h3 { font-size: 28px; font-weight: 800; text-transform: uppercase; }
 .cell p { margin: 0; color: var(--muted); font-size: 15px; }
 .specs { margin-top: auto; padding-top: 10px; }
 
-/* recent work */
-.recent { display: grid; gap: 20px 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-.recent .card:nth-child(1) { grid-column: 1 / -1; }
-@media (min-width: 900px) {
-  .recent { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .recent .card:nth-child(1) { grid-column: 1 / span 2; grid-row: 1 / span 2; }
-}
-.card { display: flex; flex-direction: column; gap: 10px; min-width: 0; text-decoration: none; }
-.card[hidden] { display: none; }
-.thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background-size: cover; background-position: center; border: 1px solid var(--line); overflow: hidden; }
-.card:nth-child(1) .thumb { flex: 1; min-height: 0; aspect-ratio: auto; min-height: 240px; }
+/* recent edited project: list feed */
+.feed { display: grid; gap: 28px; max-width: 1148px; }
+.item { display: grid; grid-template-columns: minmax(0, 520px) minmax(0, 1fr); gap: 18px; text-decoration: none; align-items: start; }
+.thumb { position: relative; aspect-ratio: 16 / 9; max-width: 100%; border: 1px solid var(--line); overflow: hidden; background-size: cover; background-position: center; }
 .g1 { background-image: linear-gradient(132deg, #ff5a8a, #6d28d9); } .g2 { background-image: linear-gradient(144deg, #22d3ee, #1e3a8a); }
 .g3 { background-image: linear-gradient(156deg, #fbbf24, #be185d); } .g4 { background-image: linear-gradient(168deg, #34d399, #0f3d5e); }
 .g5 { background-image: linear-gradient(180deg, #a78bfa, #f97316); } .g6 { background-image: linear-gradient(192deg, #f97316, #7c1d6f); }
 .g7 { background-image: linear-gradient(204deg, #2dd4bf, #4338ca); } .g8 { background-image: linear-gradient(216deg, #facc15, #dc2626); }
 .g9 { background-image: linear-gradient(228deg, #60a5fa, #9333ea); }
+.thumb .cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .play { position: absolute; inset: 0; display: grid; place-items: center; }
-.play span { width: 54px; height: 54px; border-radius: 50%; background: rgba(12,14,18,.62); display: grid; place-items: center; border: 1px solid rgba(255,255,255,.55); transition: transform .2s; }
-.play svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; }
-.card:hover .play span, .card:focus-visible .play span { transform: scale(1.12); }
-.dur { position: absolute; right: 8px; bottom: 8px; background: rgba(12,14,18,.78); color: #fff; font: 500 11px var(--mono); padding: 2px 6px; }
-.plat { position: absolute; left: 8px; top: 8px; background: rgba(12,14,18,.78); color: #fff; font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; }
-.card h3 { font-size: 24px; font-weight: 800; text-transform: uppercase; }
-.card .meta { color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.card .go { color: var(--accent); }
-.more { margin-top: 28px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.play span { width: 48px; height: 48px; border-radius: 50%; background: rgba(12,14,18,.62); display: grid; place-items: center; border: 1px solid rgba(255,255,255,.55); transition: transform .2s; }
+.play svg { width: 18px; height: 18px; fill: #fff; margin-left: 3px; }
+.item:hover .play span, .item:focus-visible .play span { transform: scale(1.12); }
+.dur { position: absolute; right: 8px; bottom: 8px; background: rgba(12,14,18,.82); color: #fff; font: 500 12px var(--mono); padding: 2px 6px; }
+.item .body { display: flex; flex-direction: column; gap: 6px; min-width: 0; padding-top: 2px; }
+.item h3 { font-family: var(--body); font-stretch: 100%; font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.item:hover h3 { color: var(--accent); }
+.item .meta { color: var(--muted); font-size: 14px; }
+.item .cap { margin: 2px 0 0; color: var(--ink); font-size: 15px; max-width: 60ch; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.item .go { color: var(--accent); font-size: 13px; font-weight: 600; }
+@media (max-width: 760px) { .item { grid-template-columns: minmax(0, 1fr); gap: 10px; } .feed { gap: 30px; } }
 
 /* toolkit */
 .tool-name { font-size: 30px; }
@@ -133,10 +164,7 @@ section { padding-top: 72px; }
 .track b { position: absolute; left: -48px; top: 12px; font: 500 11px var(--mono); color: var(--muted); }
 .clip { position: absolute; top: 3px; bottom: 3px; padding: 4px 8px; font: 500 11px var(--mono); color: var(--clip-ink); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .clip.v { background: var(--clip-v); } .clip.v2 { background: var(--clip-v2); } .clip.a { background: var(--clip-a); } .clip.t { background: var(--clip-t); }
-.playhead { position: absolute; top: 0; bottom: 0; left: calc(56px + (100% - 70px) * .38); width: 0; border-left: 2px solid var(--accent); animation: scrub 14s linear infinite alternate; }
-.playhead::before { content: ""; position: absolute; top: 0; left: -7px; border: 6px solid transparent; border-top: 9px solid var(--accent); }
-@keyframes scrub { from { left: calc(56px + (100% - 70px) * .12); } to { left: calc(56px + (100% - 70px) * .74); } }
-@media (prefers-reduced-motion: reduce) { .playhead { animation: none; } .play span { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .play span, .layer, .lt, .ttl { transition: none; } }
 
 /* process */
 .steps { display: grid; gap: 0; }
@@ -157,7 +185,6 @@ section { padding-top: 72px; }
 .field label { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .field select, .field input, .field textarea { font: inherit; background: var(--surface); color: var(--ink); border: 1px solid var(--line); padding: 11px 12px; width: 100%; min-width: 0; }
 .out { background: var(--surface); border: 1px solid var(--line); padding: 16px; font: 400 13px/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; min-height: 200px; }
-footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .tool-ico { width: 44px; height: 44px; color: var(--ink); display: block; }
 .tool-ico svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 2.5; fill: currentColor; }
 .tool-ico path { fill: none; }
@@ -181,81 +208,79 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
 .specs { color: var(--c2); }
 /* hover pop: text lifts and grows slightly under the cursor */
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .hero h1, .hero p, .sec-head h2, .cell h3, .cell p, .cell ul li, .step h3, .step p, .card h3, .card .meta, .price, .links a, .mono, .field label {
+  .hero h1, .hero p, .sec-head h2, .cell h3, .cell p, .cell ul li, .step h3, .step p, .card h3, .card .meta, .price, .mono, .field label {
     transition: transform .18s ease, color .18s ease, text-shadow .18s ease;
     transform-origin: left center;
   }
-  .links a, .mono { display: inline-block; }
+  .mono { display: inline-block; }
   .hero h1:hover { transform: translateY(-4px) scale(1.02); }
   .hero p:hover, .cell p:hover, .step p:hover, .cell ul li:hover { transform: translateY(-2px) scale(1.03); color: var(--ink); }
   .sec-head h2:hover, .cell h3:hover, .step h3:hover, .card h3:hover, .price:hover { transform: translateY(-3px) scale(1.05); text-shadow: 0 6px 18px rgba(0,0,0,.28); }
   .card h3:hover, .cell h3:hover, .step h3:hover { color: var(--accent); }
   .card .meta:hover { transform: translateY(-2px) scale(1.03); color: var(--ink); }
-  .links a:hover, .mono:hover, .field label:hover { transform: translateY(-2px) scale(1.08); }
+  .mono:hover, .field label:hover { transform: translateY(-2px) scale(1.08); }
   .cell, .card .thumb { transition: transform .2s ease, box-shadow .2s ease; }
   .cell:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,.25); position: relative; z-index: 1; }
   .card:hover .thumb { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(0,0,0,.35); }
 }
+.btn.send { display: inline-flex; align-items: center; gap: 10px; }
+.btn.send svg { width: 18px; height: 18px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* details: click a title to open */
+#details { padding-top: 72px; }
+.acc { border-top: 4px solid var(--accent); }
+.acc.c2 { border-top-color: var(--c2); } .acc.c3 { border-top-color: var(--c3); } .acc.c4 { border-top-color: var(--c4); } .acc.c5 { border-top-color: var(--c5); }
+.acc summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 16px; padding: 18px 0; }
+.acc summary::-webkit-details-marker { display: none; }
+.acc summary h2 { font-size: clamp(30px, 5vw, 56px); font-weight: 800; text-transform: uppercase; grid-column: 1; }
+.acc summary .mono { grid-column: 1; }
+.acc summary::after { content: "+"; grid-column: 2; grid-row: 1 / span 2; width: 46px; height: 46px; border: 1px solid var(--line); display: grid; place-items: center; font: 400 28px/1 var(--mono); color: var(--ink); }
+.acc[open] summary::after { content: "\2212"; }
+.acc summary:hover h2, .acc summary:focus-visible h2 { color: var(--accent); }
+.acc-body { padding: 6px 0 40px; }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <nav>
-    <a class="logo-link" href="#top" aria-label="Rawscreen home"><img class="logo-word" src="images/rawscreen-wordmark.jpg" alt="Rawscreen"></a>
-    <div class="links">
-      <a href="#recent">Recent work</a><a href="#services">Services</a><a href="#process">Process</a><a href="#toolkit">Software</a><a href="#rates">Rates</a><a href="#brief">Start a project</a>
-      <button class="toggle" id="theme" type="button" aria-label="Switch light or dark theme">THEME</button>
+<header class="topbar">
+  <nav class="bar-in" aria-label="Main">
+    <a class="logo-link" href="#top" aria-label="Rawscreen home"><img class="logo-word" src="images/rawscreen-wordmark.png" alt="Rawscreen" width="756" height="116"></a>
+    <div class="strip">
+      <a href="#recent">Recent Edited Project</a><a href="#details">Details</a><a href="#brief">Start a project</a>
+      <button class="nav-btn" id="contactBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="contactMenu">Contact us <span aria-hidden="true">&#9662;</span></button>
+      <button class="nav-btn theme" id="theme" type="button" aria-label="Switch light or dark theme">Theme</button>
     </div>
   </nav>
-
-  <header class="hero" id="top">
-    <div>
-      <span class="mono">Video editing hub / Reel 01 / 23.976 fps</span>
-      <h1>Cut it raw.<br><em>Ship it clean.</em></h1>
-      <p>Rawscreen takes your unsorted footage and returns a finished film. Story edit, colour, sound and delivery, handled by editors who live in the timeline.</p>
-      <div class="cta"><a class="btn" href="#brief">Start a project</a><a class="btn ghost" href="#recent">See recent work</a></div>
-    </div>
-    <div class="plate"><img src="images/rawscreen-logo.jpg" alt="Rawscreen logo: the wordmark inside a curved screen frame"></div>
-  </header>
-
-  <section id="recent">
-    <div class="sec-head"><h2>Recent work</h2><span class="mono">Latest 5 projects, live where our clients posted them</span></div>
-    <div class="recent" id="recentList"></div>
-    <div class="more"><button class="btn ghost" id="moreBtn" hidden type="button" aria-expanded="false" aria-controls="recentList">See more work</button><span class="mono" id="workNote">Loading recent work</span></div>
-  </section>
-
-  <section id="services">
-    <div class="sec-head"><h2>What we cut</h2><span class="mono">Five disciplines, one hub</span></div>
-    <div class="grid">
-      <div class="cell"><h3>Story edit</h3><p>Interviews, documentaries, ads and brand films shaped from hours of rushes into a clear arc.</p><span class="mono specs">Premiere Pro</span></div>
-      <div class="cell"><h3>Short-form</h3><p>Reels, Shorts and TikToks with captions, punch-ins and pacing built for the first two seconds.</p><span class="mono specs">9:16 / 1:1 / 16:9</span></div>
-      <div class="cell"><h3>Colour</h3><p>Matching cameras, fixing skin tones and building a look that holds from phone to cinema.</p><span class="mono specs">DaVinci Resolve / Rec.709</span></div>
-      <div class="cell"><h3>Motion &amp; titles</h3><p>Lower thirds, kinetic type, logo stings and simple graphics that match your brand.</p><span class="mono specs">After Effects</span></div>
-      <div class="cell"><h3>Sound</h3><p>Dialogue clean-up, music edit and a balanced mix that meets platform loudness targets.</p><span class="mono specs">-14 LUFS web / -23 LUFS broadcast</span></div>
-    </div>
-  </section>
-
-  <section id="process">
-    <div class="sec-head"><h2>From rushes to render</h2><span class="mono">Every project runs in this order</span></div>
-    <div class="steps">
-      <div class="step"><span class="mono">Stage 1 / Ingest</span><div><h3>Sync and sort</h3><p>You send footage. We make proxies, sync audio, log selects and agree the brief before the first cut.</p></div></div>
-      <div class="step"><span class="mono">Stage 2 / Assembly</span><div><h3>Rough cut</h3><p>The full story in order, with placeholder music and no polish. You review structure, not details.</p></div></div>
-      <div class="step"><span class="mono">Stage 3 / Fine cut</span><div><h3>Pace and picture lock</h3><p>Trims, transitions, graphics and cutaways. Two feedback rounds are included, then the picture locks.</p></div></div>
-      <div class="step"><span class="mono">Stage 4 / Finish</span><div><h3>Grade and mix</h3><p>Colour, sound and final graphics are applied to the locked picture so nothing shifts afterwards.</p></div></div>
-      <div class="step"><span class="mono">Stage 5 / Deliver</span><div><h3>Export for every screen</h3><p>Master file plus platform versions, subtitles and thumbnails, delivered by link.</p></div></div>
-    </div>
-  </section>
-
-  <section id="toolkit">
-    <div class="sec-head"><h2>The software we use</h2><span class="mono">Three suites, one pipeline</span></div>
-    <div class="grid">
-      <div class="cell"><span class="mono tool-tag">Adobe</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="10" width="26" height="8"/><rect x="13" y="22" width="30" height="8"/><rect x="5" y="34" width="20" height="6"/></svg></span><h3 class="tool-name">Premiere Pro</h3><p>Where the story is built. Assembly, rough cut, fine cut and multi-camera sync all happen here.</p><span class="mono specs">Edit / Captions / Export</span></div>
-      <div class="cell"><span class="mono tool-tag">Adobe</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 C16 6 30 42 42 12" fill="none"/><rect x="3" y="33" width="6" height="6" transform="rotate(45 6 36)"/><rect x="39" y="9" width="6" height="6" transform="rotate(45 42 12)"/></svg></span><h3 class="tool-name">After Effects</h3><p>Motion graphics, animated titles, logo stings and visual effects that drop straight into the edit.</p><span class="mono specs">Titles / Motion / VFX</span></div>
-      <div class="cell"><span class="mono tool-tag">Blackmagic Design</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 8v32M24 8v32M38 8v32" fill="none"/><rect x="5" y="14" width="10" height="6"/><rect x="19" y="28" width="10" height="6"/><rect x="33" y="18" width="10" height="6"/></svg></span><h3 class="tool-name">DaVinci Resolve</h3><p>Colour grading and finishing. Cameras are matched, looks are built and the master is graded here.</p><span class="mono specs">Grade / LUTs / Finish</span></div>
+<div class="contact-menu" id="contactMenu" role="menu" aria-label="Contact Rawscreen" hidden>
+  <a role="menuitem" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=rawscreenpost%40gmail.com&amp;su=Video%20editing%20project%20enquiry" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg><span>Email</span></a>
+  <a role="menuitem" href="https://wa.me/8801852060121" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H10l-5 4v-4H4z"/></svg><span>WhatsApp</span></a>
+  <a role="menuitem" href="https://www.facebook.com/rawscreen" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 19c0-3.5 2.7-5.5 6-5.5s6 2 6 5.5M15 14.5c3 0 6 1.4 6 4.5"/></svg><span>Facebook</span></a>
+  <a role="menuitem" href="https://www.upwork.com/freelancers/~0165db1e324d29b373" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/></svg><span>Upwork</span></a>
+</div>
+</header>
+<div class="wrap" id="top">
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <h1>Cut it raw.<br><em>Ship it clean.</em></h1>
+        <p>Rawscreen takes your unsorted footage and returns a finished film. Story edit, colour, sound and delivery, handled by editors who live in the timeline.</p>
+      </div>
+      <div class="monitor" role="img" aria-label="Animated preview that follows the timeline playhead">
+        <div class="mon-bar"><span>Program monitor</span><b id="monClip">A001_C004 interview</b></div>
+        <div class="screen">
+          <div class="layer on"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a2a46"/><stop offset="1" stop-color="#d9895a"/></linearGradient></defs><rect width="160" height="90" fill="url(#gA)"/><circle cx="80" cy="36" r="14" fill="rgba(10,10,14,.55)"/><path d="M46 90c0-22 14-32 34-32s34 10 34 32z" fill="rgba(10,10,14,.55)"/></svg></div>
+          <div class="layer"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="gB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3b36b"/><stop offset=".5" stop-color="#e0765a"/><stop offset=".51" stop-color="#1d4e6b"/><stop offset="1" stop-color="#0e2a3d"/></linearGradient></defs><rect width="160" height="90" fill="url(#gB)"/><circle cx="118" cy="32" r="9" fill="#fff6d6" opacity=".9"/><path d="M52 62h46l-7 9H59z" fill="rgba(8,14,22,.8)"/><path d="M74 62V38l16 20z" fill="rgba(8,14,22,.8)"/></svg></div>
+          <div class="layer"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="gC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b2540"/><stop offset="1" stop-color="#5a6cff"/></linearGradient></defs><rect width="160" height="90" fill="url(#gC)"/><ellipse cx="80" cy="72" rx="26" ry="4" fill="rgba(0,0,0,.35)"/><rect x="62" y="20" width="36" height="50" rx="6" fill="rgba(255,255,255,.88)"/><rect x="68" y="28" width="24" height="6" rx="2" fill="#5a6cff"/></svg></div>
+          <div class="layer"><svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="gD" cx=".5" cy=".55" r=".75"><stop offset="0" stop-color="#ffd08a"/><stop offset=".4" stop-color="#ff5a8a"/><stop offset="1" stop-color="#2a1747"/></radialGradient></defs><rect width="160" height="90" fill="url(#gD)"/><circle cx="80" cy="50" r="10" fill="rgba(255,255,255,.8)"/><circle cx="80" cy="50" r="24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1.5"/><circle cx="80" cy="50" r="38" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/></svg></div>
+          <div class="lt" id="monLT">Speaker name<small>Title, Company</small></div>
+          <div class="ttl" id="monTitle">Brand film</div>
+          <div class="vu" aria-hidden="true"><i></i><i></i></div>
+        </div>
+        <div class="prog"><i id="monProg"></i></div>
+        <div class="mon-bar"><b id="monTC">00:00:00:00</b><span>&#9654; Play</span></div>
+      </div>
     </div>
     <div class="nle" role="img" aria-label="Sample edit timeline with video, title and audio tracks">
-      <div class="nle-head"><span class="mono">Sequence: Brand_Film_v3</span><span class="mono">TC 00:00:42:11 &nbsp;|&nbsp; 3840x2160 &nbsp;|&nbsp; ProRes 422 HQ</span></div>
+      <div class="nle-head"><span class="mono">Sequence: Brand_Film_v3</span><span class="mono">TC <span id="nleTC">00:00:42:11</span> &nbsp;|&nbsp; 3840x2160 &nbsp;|&nbsp; ProRes 422 HQ</span></div>
       <div class="nle-scroll">
         <div class="nle-body">
           <div class="ruler">
@@ -265,41 +290,68 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
           <div class="track"><b>V1</b><div class="clip v" style="left:0;width:22%">A001_C004 interview</div><div class="clip v2" style="left:22.5%;width:16%">B-roll harbour</div><div class="clip v" style="left:39%;width:27%">A002_C011 product</div><div class="clip v2" style="left:66.5%;width:33.5%">B-roll finale</div></div>
           <div class="track"><b>A1</b><div class="clip a" style="left:0;width:66%">Dialogue, noise reduced</div><div class="clip a" style="left:66.5%;width:33.5%">VO tail</div></div>
           <div class="track"><b>A2</b><div class="clip a" style="left:4%;width:92%">Score, ducked -14 dB under dialogue</div></div>
+          <div class="playhead" id="playhead" aria-hidden="true"></div>
         </div>
-        <div class="playhead" aria-hidden="true"></div>
       </div>
     </div>
+  </header>
+
+  <section id="recent">
+    <div class="sec-head"><h2>Recent Edited Project</h2><span class="mono" id="workNote">Loading projects</span></div>
+    <div class="feed" id="recentList"></div>
   </section>
 
-  <section id="rates">
-    <div class="sec-head"><h2>Rates</h2><span class="mono">Example pricing, edit before launch</span></div>
-    <div class="grid">
+  <section id="details">
+    <details class="acc" id="services"><summary><h2>What we cut</h2><span class="mono">Five disciplines, one hub</span></summary><div class="acc-body">    <div class="grid">
+      <div class="cell"><h3>Story edit</h3><p>Interviews, documentaries, ads and brand films shaped from hours of rushes into a clear arc.</p><span class="mono specs">Premiere Pro</span></div>
+      <div class="cell"><h3>Short-form</h3><p>Reels, Shorts and TikToks with captions, punch-ins and pacing built for the first two seconds.</p><span class="mono specs">9:16 / 1:1 / 16:9</span></div>
+      <div class="cell"><h3>Colour</h3><p>Matching cameras, fixing skin tones and building a look that holds from phone to cinema.</p><span class="mono specs">DaVinci Resolve / Rec.709</span></div>
+      <div class="cell"><h3>Motion &amp; titles</h3><p>Lower thirds, kinetic type, logo stings and simple graphics that match your brand.</p><span class="mono specs">After Effects</span></div>
+      <div class="cell"><h3>Sound</h3><p>Dialogue clean-up, music edit and a balanced mix that meets platform loudness targets.</p><span class="mono specs">-14 LUFS web / -23 LUFS broadcast</span></div>
+    </div>
+  </div></details>
+    <details class="acc c2" id="process"><summary><h2>From rushes to render</h2><span class="mono">Every project runs in this order</span></summary><div class="acc-body">    <div class="steps">
+      <div class="step"><span class="mono">Stage 1 / Ingest</span><div><h3>Sync and sort</h3><p>You send footage. We make proxies, sync audio, log selects and agree the brief before the first cut.</p></div></div>
+      <div class="step"><span class="mono">Stage 2 / Assembly</span><div><h3>Rough cut</h3><p>The full story in order, with placeholder music and no polish. You review structure, not details.</p></div></div>
+      <div class="step"><span class="mono">Stage 3 / Fine cut</span><div><h3>Pace and picture lock</h3><p>Trims, transitions, graphics and cutaways. Two feedback rounds are included, then the picture locks.</p></div></div>
+      <div class="step"><span class="mono">Stage 4 / Finish</span><div><h3>Grade and mix</h3><p>Colour, sound and final graphics are applied to the locked picture so nothing shifts afterwards.</p></div></div>
+      <div class="step"><span class="mono">Stage 5 / Deliver</span><div><h3>Export for every screen</h3><p>Master file plus platform versions, subtitles and thumbnails, delivered by link.</p></div></div>
+    </div>
+  </div></details>
+    <details class="acc c3" id="toolkit"><summary><h2>The software we use</h2><span class="mono">Three suites, one pipeline</span></summary><div class="acc-body">    <div class="grid">
+      <div class="cell"><span class="mono tool-tag">Adobe</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="10" width="26" height="8"/><rect x="13" y="22" width="30" height="8"/><rect x="5" y="34" width="20" height="6"/></svg></span><h3 class="tool-name">Premiere Pro</h3><p>Where the story is built. Assembly, rough cut, fine cut and multi-camera sync all happen here.</p><span class="mono specs">Edit / Captions / Export</span></div>
+      <div class="cell"><span class="mono tool-tag">Adobe</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 C16 6 30 42 42 12" fill="none"/><rect x="3" y="33" width="6" height="6" transform="rotate(45 6 36)"/><rect x="39" y="9" width="6" height="6" transform="rotate(45 42 12)"/></svg></span><h3 class="tool-name">After Effects</h3><p>Motion graphics, animated titles, logo stings and visual effects that drop straight into the edit.</p><span class="mono specs">Titles / Motion / VFX</span></div>
+      <div class="cell"><span class="mono tool-tag">Blackmagic Design</span><span class="tool-ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 8v32M24 8v32M38 8v32" fill="none"/><rect x="5" y="14" width="10" height="6"/><rect x="19" y="28" width="10" height="6"/><rect x="33" y="18" width="10" height="6"/></svg></span><h3 class="tool-name">DaVinci Resolve</h3><p>Colour grading and finishing. Cameras are matched, looks are built and the master is graded here.</p><span class="mono specs">Grade / LUTs / Finish</span></div>
+    </div>
+    </div></details>
+    <details class="acc c4" id="rates"><summary><h2>Rates</h2><span class="mono">Example pricing, edit before launch</span></summary><div class="acc-body">    <div class="grid">
       <div class="cell"><span class="mono tag">Short-form</span><div class="price">$40 <small>/ video</small></div><ul><li>Up to 60 seconds</li><li>Captions and music</li><li>1 revision round</li></ul></div>
       <div class="cell"><span class="mono tag">Story edit</span><div class="price">$300 <small>/ finished min</small></div><ul><li>Full edit, colour and mix</li><li>2 revision rounds</li><li>Master plus web export</li></ul></div>
       <div class="cell"><span class="mono tag">Monthly hub</span><div class="price">$900 <small>/ month</small></div><ul><li>Up to 12 short-form videos</li><li>One long-form edit</li><li>48-hour turnaround</li></ul></div>
     </div>
+  </div></details>
   </section>
-
-  <section id="brief">
-    <div class="sec-head"><h2>Start a project</h2><span class="mono">Build your brief, copy it, send it</span></div>
+    <section id="brief">
+    <div class="sec-head"><h2>Start a project</h2><span class="mono">Build your brief and send to us</span></div>
     <div class="brief">
       <form id="form" autocomplete="off">
-        <div class="field"><label for="type">Project type</label><select id="type"><option>Brand film</option><option>Short-form social</option><option>Documentary</option><option>YouTube video</option><option>Event recap</option></select></div>
-        <div class="field"><label for="len">Finished length</label><input id="len" value="2 minutes"></div>
-        <div class="field"><label for="raw">Raw footage</label><input id="raw" value="3 hours, 4K, Log"></div>
-        <div class="field"><label for="deliver">Deliver as</label><select id="deliver"><option>16:9 master + 9:16 cutdown</option><option>16:9 only</option><option>9:16 only</option><option>All aspect ratios + subtitles</option></select></div>
+        <div class="field"><label for="type">Project type</label><select id="type"><option>Social Media Content</option><option>Short film/Drama</option><option>Full-length Movies</option><option>Music Video</option><option>Documentary</option><option>Event Recap</option></select></div>
+        <div class="field"><label for="len">Finished length (minutes)</label><input id="len" type="number" min="0" step="0.5" inputmode="decimal" value="2"></div>
+        <div class="field"><label for="raw">Raw footage size</label><select id="raw"><option>Under 10 GB</option><option>Over 10 GB</option><option>Over 100 GB</option><option>Over 1,000 GB</option></select></div>
+        <div class="field"><label for="deliver">Deliver aspect ratio</label><select id="deliver"><option>16:9 only</option><option>16:9 master + 9:16 cutdown</option><option>9:16 only</option><option>Others</option></select></div>
+        <div class="field" id="otherWrap" hidden><label for="other">Other aspect ratio</label><input id="other" placeholder="For example 1:1 or 4:5"></div>
+        <div class="field"><label for="req">Editing requirement</label><select id="req"><option>Edit Only</option><option>Color only</option><option>Total Post-production</option></select></div>
         <div class="field"><label for="due">Deadline</label><input id="due" type="date"></div>
         <div class="field"><label for="notes">Notes</label><textarea id="notes" rows="3">Reference: clean, warm grade, upbeat music.</textarea></div>
       </form>
       <div>
         <div class="out" id="out" aria-live="polite"></div>
-        <div class="cta" style="margin-top:14px"><button class="btn" id="copy" type="button">Copy brief</button><span class="mono" id="msg" style="align-self:center"></span></div>
+        <div class="cta" style="margin-top:14px"><a class="btn send" id="sendWa" href="#" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H10l-5 4v-4H4z"/></svg><span>Send WhatsApp</span></a><a class="btn send ghost" id="sendMail" href="#" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7l8.5 6.5L20.5 7"/></svg><span>Send email</span></a></div>
       </div>
     </div>
   </section>
-
-  <footer><img class="logo-word" src="images/rawscreen-wordmark.jpg" alt="Rawscreen" style="height:26px"><span class="mono">Video editing hub / End of reel</span></footer>
 </div>
+<footer class="foot"><div class="bar-in"><img class="foot-logo" src="images/rawscreen-wordmark.png" alt="Rawscreen" width="756" height="116"><span class="foot-txt">Video editing hub / End of reel</span></div></footer>
 
 <script>
 (function () {
@@ -313,97 +365,154 @@ footer { margin-top: 72px; padding-top: 16px; border-top: 1px solid var(--line);
     try { localStorage.setItem("rs-theme", next); } catch (e) {}
   });
 
-  /* RECENT WORK is loaded from content/work.json. Edit that file (or use admin.html), not this script. */
-  var LABEL = { youtube: "YouTube", facebook: "Facebook", video: "Video link" };
-  var SHOWN = 5;
+  /* RECENT EDITED PROJECT is loaded from content/work.json. Edit that file (or use admin.html), not this script. */
+  var LABEL = { youtube: "YouTube", facebook: "Facebook", chorki: "Chorki", video: "Video link" };
   var list = document.getElementById("recentList");
-  var btn = document.getElementById("moreBtn");
   var note = document.getElementById("workNote");
-  var cards = [];
-  var open = false;
 
   function ytId(u) {
     var m = String(u || "").match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
     return m ? m[1] : "";
   }
   function setThumb(th, w) {
-    if (w.thumb) { th.style.backgroundImage = "url(" + encodeURI(w.thumb) + ")"; return; }
-    var id = ytId(w.url);
-    if (!id) return;
-    var hi = "https://img.youtube.com/vi/" + id + "/maxresdefault.jpg";
-    var mid = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
-    var probe = new Image();
-    probe.onload = function () { th.style.backgroundImage = "url(" + (probe.naturalWidth > 200 ? hi : mid) + ")"; };
-    probe.onerror = function () { th.style.backgroundImage = "url(" + mid + ")"; };
-    probe.src = hi;
+    var id = ytId(w.url), hi = "", mid = "";
+    if (!w.thumb && !id) return;
+    var img = document.createElement("img");
+    img.alt = ""; img.className = "cover"; img.loading = "lazy"; img.decoding = "async";
+    img.addEventListener("error", function () {
+      if (id && !w.thumb && img.src === hi) { img.src = mid; } else { img.remove(); }
+    });
+    if (w.thumb) { img.src = encodeURI(w.thumb); }
+    else {
+      hi = "https://img.youtube.com/vi/" + id + "/maxresdefault.jpg";
+      mid = "https://img.youtube.com/vi/" + id + "/hqdefault.jpg";
+      img.addEventListener("load", function () { if (img.src === hi && img.naturalWidth <= 200) img.src = mid; });
+      img.src = hi;
+    }
+    th.insertBefore(img, th.firstChild);
   }
   function render(work) {
     list.textContent = "";
-    cards = work.map(function (w, i) {
+    work.forEach(function (w, i) {
       var platform = LABEL[w.platform] ? w.platform : "video";
       var a = document.createElement("a");
-      a.className = "card"; a.href = w.url; a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.className = "item"; a.href = w.url; a.target = "_blank"; a.rel = "noopener noreferrer";
       a.setAttribute("aria-label", w.title + " on " + LABEL[platform]);
-      if (i >= SHOWN) a.hidden = true;
       var th = document.createElement("div"); th.className = "thumb g" + ((i % 9) + 1);
       setThumb(th, w);
-      var p = document.createElement("span"); p.className = "plat"; p.textContent = LABEL[platform];
       var pl = document.createElement("div"); pl.className = "play";
       pl.innerHTML = '<span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 1.5v17l15-8.5z"/></svg></span>';
-      th.appendChild(p); th.appendChild(pl);
+      th.appendChild(pl);
       if (w.dur) { var d = document.createElement("span"); d.className = "dur"; d.textContent = w.dur; th.appendChild(d); }
+      var body = document.createElement("div"); body.className = "body";
       var h = document.createElement("h3"); h.textContent = w.title;
-      var m = document.createElement("div"); m.className = "meta";
-      var c = document.createElement("span"); c.textContent = w.client || "";
+      var m = document.createElement("div"); m.className = "meta"; m.textContent = LABEL[platform] + (w.client ? " · " + w.client : "");
+      body.appendChild(h); body.appendChild(m);
+      if (w.caption) { var c = document.createElement("p"); c.className = "cap"; c.textContent = w.caption; body.appendChild(c); }
       var g = document.createElement("span"); g.className = "go"; g.textContent = "Watch on " + LABEL[platform] + " →";
-      m.appendChild(c); m.appendChild(g);
-      a.appendChild(th); a.appendChild(h); a.appendChild(m);
+      body.appendChild(g);
+      a.appendChild(th); a.appendChild(body);
       list.appendChild(a);
-      return a;
     });
-    btn.hidden = cards.length <= SHOWN;
-    note.textContent = "";
+    note.textContent = work.length + " projects, live where they were posted";
   }
-  btn.addEventListener("click", function () {
-    open = !open;
-    cards.forEach(function (c, i) { if (i >= SHOWN) c.hidden = !open; });
-    btn.textContent = open ? "Show less" : "See more work";
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
-  });
   fetch("content/work.json", { cache: "no-cache" })
     .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(function (data) { render(Array.isArray(data) ? data : (data.work || [])); })
     .catch(function () {
-      btn.hidden = true;
-      note.textContent = "Recent work could not load. Check that content/work.json is uploaded and the site is opened from its web address.";
+      note.textContent = "Projects could not load. Check that content/work.json is uploaded and the site is opened from its web address.";
     });
 
-  var ids = ["type", "len", "raw", "deliver", "due", "notes"];
+  /* Preview monitor follows the timeline playhead */
+  (function () {
+    var ph = document.getElementById("playhead"); if (!ph) return;
+    var clips = [{ n: "A001_C004 interview", a: 0, b: 0.225 }, { n: "B-roll harbour", a: 0.225, b: 0.39 }, { n: "A002_C011 product", a: 0.39, b: 0.665 }, { n: "B-roll finale", a: 0.665, b: 1.0001 }];
+    var layers = [].slice.call(document.querySelectorAll(".layer")), vu = [].slice.call(document.querySelectorAll(".vu i"));
+    var lt = document.getElementById("monLT"), ttl = document.getElementById("monTitle"), clipEl = document.getElementById("monClip");
+    var tcEl = document.getElementById("monTC"), nleTC = document.getElementById("nleTC"), prog = document.getElementById("monProg");
+    var TOTAL = 80, LOOP = 24000, last = -1;
+    function pad(n) { return (n < 10 ? "0" : "") + n; }
+    function tc(f) { var t = f * TOTAL, s = Math.floor(t), fr = Math.floor((t - s) * 24); return "00:" + pad(Math.floor(s / 60)) + ":" + pad(s % 60) + ":" + pad(fr); }
+    function show(f, now) {
+      ph.style.left = "calc(56px + (100% - 70px) * " + f + ")";
+      var idx = 0; clips.forEach(function (c, i) { if (f >= c.a && f < c.b) idx = i; });
+      if (idx !== last) { layers.forEach(function (l, i) { l.classList.toggle("on", i === idx); }); clipEl.textContent = clips[idx].n; last = idx; }
+      var c = clips[idx]; layers[idx].style.transform = "scale(" + (1.03 + 0.07 * (f - c.a) / (c.b - c.a)) + ")";
+      lt.classList.toggle("on", f >= 0.06 && f < 0.2); ttl.classList.toggle("on", f >= 0.52 && f < 0.7);
+      var t = tc(f); tcEl.textContent = t; if (nleTC) nleTC.textContent = t; prog.style.width = (f * 100) + "%";
+      vu.forEach(function (bar, i) { bar.style.height = (22 + 60 * Math.abs(Math.sin(now / 170 + i * 1.7))) + "%"; });
+    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { show(0.38, 0); return; }
+    function tick(now) { show(((now + 0.12 * LOOP) % LOOP) / LOOP, now); requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  })();
+
+  var cBtn = document.getElementById("contactBtn"), cMenu = document.getElementById("contactMenu");
+  function placeMenu() {
+    var r = cBtn.getBoundingClientRect(), w = cMenu.offsetWidth || 220;
+    var left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8));
+    cMenu.style.left = left + "px"; cMenu.style.top = Math.round(r.bottom + 6) + "px";
+  }
+  function setMenu(show) {
+    cMenu.hidden = !show; cBtn.setAttribute("aria-expanded", show ? "true" : "false");
+    if (show) { placeMenu(); var f = cMenu.querySelector("a"); if (f) f.focus(); }
+  }
+  cBtn.addEventListener("click", function (e) { e.stopPropagation(); setMenu(cMenu.hidden); });
+  document.addEventListener("click", function (e) { if (!cMenu.hidden && !cMenu.contains(e.target)) setMenu(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !cMenu.hidden) { setMenu(false); cBtn.focus(); } });
+  cMenu.addEventListener("click", function () { setMenu(false); });
+  window.addEventListener("resize", function () { if (!cMenu.hidden) placeMenu(); });
+  document.querySelector(".strip").addEventListener("scroll", function () { if (!cMenu.hidden) placeMenu(); }, { passive: true });
+
+  var navLinks = [].slice.call(document.querySelectorAll(".strip a"));
+  var targets = navLinks.map(function (a) { return document.querySelector(a.getAttribute("href")); });
+  function mark() {
+    var y = window.scrollY + 140, cur = -1;
+    targets.forEach(function (t, i) { if (t && t.offsetTop <= y) cur = i; });
+    navLinks.forEach(function (a, i) { if (i === cur) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current"); });
+  }
+  window.addEventListener("scroll", mark, { passive: true }); window.addEventListener("resize", mark); mark();
+
+  var RATE = { "Social Media Content": 5000, "Music Video": 5000, "Short film/Drama": 2000, "Full-length Movies": 2000, "Documentary": 2000, "Event Recap": 2000 };
+  var ids = ["type", "len", "raw", "deliver", "other", "req", "due", "notes"];
   var out = document.getElementById("out");
+  var mail = document.getElementById("sendMail");
+  var wa = document.getElementById("sendWa");
+  var otherWrap = document.getElementById("otherWrap");
+  function fmt(n) { return Math.round(n).toLocaleString("en-US") + " Tk"; }
   function build() {
-    var v = {}; ids.forEach(function (i) { v[i] = document.getElementById(i).value || "not set"; });
+    var v = {}; ids.forEach(function (i) { v[i] = document.getElementById(i).value.trim(); });
+    otherWrap.hidden = v.deliver !== "Others";
+    var ratio = v.deliver === "Others" ? "Others" + (v.other ? ": " + v.other : "") : v.deliver;
+    var mins = parseFloat(v.len), rate = RATE[v.type] || 0, total = v.req === "Total Post-production";
+    var cutdown = v.deliver === "16:9 master + 9:16 cutdown";
+    var bigRaw = v.type === "Social Media Content" && v.raw !== "Under 10 GB";
+    var budget;
+    if (!(mins > 0)) { budget = "Enter the finished length to see the estimate."; }
+    else {
+      var amount = mins * rate;
+      if (total) amount *= 1.5;
+      if (cutdown) amount *= 1.2;
+      if (bigRaw) amount *= 1.5;
+      budget = fmt(amount);
+    }
     var text = "RAWSCREEN PROJECT BRIEF\n-----------------------\n" +
-      "Type:        " + v.type + "\nLength:      " + v.len + "\nRaw footage: " + v.raw +
-      "\nDeliver as:  " + v.deliver + "\nDeadline:    " + v.due + "\nNotes:       " + v.notes;
+      "Type:          " + v.type + "\nLength:        " + (v.len ? v.len + " minutes" : "not set") +
+      "\nRaw footage:   " + v.raw + "\nAspect ratio:  " + ratio +
+      "\nEditing:       " + v.req + "\nDeadline:      " + (v.due || "not set") + "\nNotes:         " + (v.notes || "none") +
+      "\n-----------------------\nEstimated budget: " + budget;
     out.textContent = text;
+    var subject = "Project brief: " + v.type + " (" + v.req + ")";
+    mail.href = "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent("rawscreenpost@gmail.com") +
+      "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(text);
+    wa.href = "https://wa.me/8801852060121?text=" + encodeURIComponent(text);
     return text;
   }
   document.getElementById("form").addEventListener("input", build);
+  document.getElementById("form").addEventListener("change", build);
   document.getElementById("form").addEventListener("submit", function (e) { e.preventDefault(); });
   build();
 
-  var msg = document.getElementById("msg");
-  document.getElementById("copy").addEventListener("click", function () {
-    var text = build();
-    function fallback() {
-      var r = document.createRange(); r.selectNodeContents(out);
-      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-      msg.textContent = "Selected. Press copy.";
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(function () { msg.textContent = "Copied"; }, fallback);
-    } else { fallback(); }
-  });
 })();
 </script>
 </body>

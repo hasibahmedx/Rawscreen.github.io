@@ -1,74 +1,128 @@
 [
   {
+    "title": "Ekjon Telapoka",
+    "client": "",
+    "caption": "Short film. A rickshaw puller loses his livelihood and finds a pistol in a slum.",
+    "platform": "chorki",
+    "url": "https://www.chorki.net/bn/shortfilm/ekjon-telapoka",
+    "dur": "38 min",
+    "thumb": "https://image.chorkicdn.com/uploads/images/2024/08/18/poster_backgrounds_cb336133bb9c965ed838fa3e563b6377_goplay_ekjon_telapoka_poster_portrait_vertical_without_mnemonic_800x1200.jpg"
+  },
+  {
+    "title": "Katakuti Khela",
+    "client": "Maasranga Drama",
+    "caption": "Eid natok 2023 from Maasranga Drama, starring Manoj and Safa Kabir.",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=gc9wRmj5G2w",
+    "dur": "",
+    "thumb": ""
+  },
+  {
+    "title": "Facebook Reel 1",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
+    "platform": "facebook",
+    "url": "https://www.facebook.com/reel/2015848389124249",
+    "dur": "",
+    "thumb": ""
+  },
+  {
+    "title": "Facebook Reel 2",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
+    "platform": "facebook",
+    "url": "https://www.facebook.com/reel/1352087856132719",
+    "dur": "",
+    "thumb": ""
+  },
+  {
+    "title": "Facebook Reel 3",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
+    "platform": "facebook",
+    "url": "https://www.facebook.com/reel/561429733398352",
+    "dur": "",
+    "thumb": ""
+  },
+  {
+    "title": "Fresh Stationery Teacher's Day OVC 2026",
+    "client": "Fresh Stationery",
+    "caption": "Teacher's Day online video commercial for Fresh Stationery.",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=QbDRMkP2-V4",
+    "dur": "1:47",
+    "thumb": ""
+  },
+  {
+    "title": "YouTube Edit",
+    "client": "Video edit",
+    "caption": "Video edited and published on YouTube.",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=1_uzjWvyn98",
+    "dur": "",
+    "thumb": ""
+  },
+  {
+    "title": "Putul Nach",
+    "client": "New Bangla Opera",
+    "caption": "Official music video featuring Arif, released on the New Bangla Opera channel.",
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=oc2brczb0BY",
+    "dur": "",
+    "thumb": ""
+  },
+  {
+    "title": "Facebook Reel 4",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
+    "platform": "facebook",
+    "url": "https://www.facebook.com/reel/1119393892093515",
+    "dur": "",
+    "thumb": ""
+  },
+  {
+    "title": "Facebook Reel 5",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
+    "platform": "facebook",
+    "url": "https://www.facebook.com/reel/1622511569151319",
+    "dur": "",
+    "thumb": ""
+  },
+  {
     "title": "Boita Asole Dey Ke",
-    "client": "Eid natok 2024, Maasranga Drama",
+    "client": "Maasranga Drama",
+    "caption": "Eid natok 2024.",
     "platform": "youtube",
     "url": "https://www.youtube.com/watch?v=PyYbXNGmVys",
     "dur": "",
     "thumb": ""
   },
   {
-    "title": "Harbour Coffee",
-    "client": "Brand film",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/",
-    "dur": "1:48",
-    "thumb": ""
-  },
-  {
-    "title": "Night Run",
-    "client": "Sportswear launch, 9:16",
+    "title": "Facebook Reel 6",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
     "platform": "facebook",
-    "url": "https://www.facebook.com/",
-    "dur": "0:15",
+    "url": "https://www.facebook.com/reel/1572454647865595",
+    "dur": "",
     "thumb": ""
   },
   {
-    "title": "Field Notes",
-    "client": "Documentary trailer",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/",
-    "dur": "0:30",
-    "thumb": ""
-  },
-  {
-    "title": "Orbit Labs",
-    "client": "Product explainer",
-    "platform": "video",
-    "url": "https://vimeo.com/",
-    "dur": "3:20",
-    "thumb": ""
-  },
-  {
-    "title": "Saffron & Co",
-    "client": "Restaurant promo",
+    "title": "Facebook Reel 7",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
     "platform": "facebook",
-    "url": "https://www.facebook.com/",
-    "dur": "0:45",
+    "url": "https://www.facebook.com/reel/24625556703705553",
+    "dur": "",
     "thumb": ""
   },
   {
-    "title": "Riverside Weddings",
-    "client": "Highlight film",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/",
-    "dur": "4:10",
-    "thumb": ""
-  },
-  {
-    "title": "Urban Fit",
-    "client": "Reel for gym launch",
+    "title": "Facebook Reel 8",
+    "client": "Short-form edit",
+    "caption": "Vertical short-form edit for Facebook Reels. Tight pacing, clean colour and balanced sound, framed for phone screens.",
     "platform": "facebook",
-    "url": "https://www.facebook.com/",
-    "dur": "0:20",
-    "thumb": ""
-  },
-  {
-    "title": "Tech Review Ep. 12",
-    "client": "YouTube series",
-    "platform": "youtube",
-    "url": "https://www.youtube.com/",
-    "dur": "9:30",
+    "url": "https://www.facebook.com/reel/967189089028579",
+    "dur": "",
     "thumb": ""
   }
 ]

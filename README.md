@@ -7,10 +7,9 @@
 
 Each project in work.json:
 
-    { "title": "Harbour Coffee", "client": "Brand film", "platform": "youtube",
-      "url": "https://www.youtube.com/watch?v=VIDEO_ID", "dur": "1:48", "thumb": "" }
+    { "title": "Project title", "client": "Channel or client", "caption": "One short line.",
+      "platform": "youtube", "url": "https://www.youtube.com/watch?v=VIDEO_ID", "dur": "1:48", "thumb": "" }
 
-- `platform` is `youtube`, `facebook` or `video`.
+- `platform` is `youtube`, `facebook`, `chorki` or `video`.
 - YouTube links get their thumbnail automatically. For other links set `thumb` to `images/work/name.jpg`.
-- The first 5 projects show first. The rest sit behind "See more work".
-
+- Every project shows in the Recent Edited Project list, in the order of the file.
